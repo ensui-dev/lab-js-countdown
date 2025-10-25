@@ -1,12 +1,20 @@
-const DURATION = 10; // 10 seconds
-let remainingTime = DURATION; // Countdown starting from 10
-let timer = null; // Variable to store the interval
+const DURATION = 10;
+let remainingTime = DURATION;
+let timer = null;
+
+const startBtn = document.getElementById("start-btn");
+const timeDisplay = document.getElementById("time");
+const closeToastBtn = document.getElementById("close-toast");
+
+let toastTimeout;
+
+startBtn.disabled = false;
 
 
 
 // ITERATION 1: Add event listener to the start button
 
-// Your code goes here ...
+startBtn.addEventListener("click", startCountdown);
 
 
 
@@ -15,8 +23,30 @@ let timer = null; // Variable to store the interval
 function startCountdown() {
   console.log("startCountdown called!");
 
-
-  // Your code goes here ...
+  startBtn.disabled = true;
+  
+  remainingTime = DURATION;
+  timeDisplay.textContent = remainingTime;
+  
+  showToast("⏰ Final countdown! ⏰");
+  
+  timer = setInterval(() => {
+    remainingTime--;
+    
+    timeDisplay.textContent = remainingTime;
+    
+    if (remainingTime === 5) {
+      showToast("Start the engines! 💥");
+    }
+    
+    if (remainingTime === 0) {
+      clearInterval(timer);
+      
+      startBtn.disabled = false;
+      
+      showToast("Lift off! 🚀");
+    }
+  }, 1000);
 }
 
 
@@ -26,13 +56,30 @@ function startCountdown() {
 function showToast(message) {
   console.log("showToast called!");
 
-  // Your code goes here ...
+  const toastElement = document.getElementById("toast");
+  const toastMessage = document.getElementById("toast-message");
+  
+  if (message) {
+    toastMessage.textContent = message;
+  }
+  
+  toastElement.classList.add("show");
+  
+  if (toastTimeout) {
+    clearTimeout(toastTimeout);
+  }
+  
+  toastTimeout = setTimeout(() => {
+    toastElement.classList.remove("show");
+  }, 3000);
 
 
 
 
   // BONUS: ITERATION 4: TOAST CLOSE BUTTON
 
-  // Your code goes here ...
-
+  closeToastBtn.addEventListener("click", () => {
+    clearTimeout(toastTimeout);
+    toastElement.classList.remove("show");
+  });
 }
